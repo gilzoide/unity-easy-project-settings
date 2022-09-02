@@ -9,17 +9,21 @@ namespace Gilzoide.EasyProjectSettings
         public const string ResourcesDirectoryIdentifier = "/Resources/";
 
         public string FilePath;
-        
+        public string SettingsPath;
+        public string Label;
+
         public bool IsRelativeToAssets => FilePath.StartsWith("Assets/");
         public bool IsRelativeToResources => FilePath.IndexOf(ResourcesDirectoryIdentifier) >= 0;
 
-        public ProjectSettingsAttribute(string filePath)
+        public ProjectSettingsAttribute(string filePath, string settingsPath = null, string label = null)
         {
             if (Path.IsPathRooted(filePath))
             {
                 throw new ProjectSettingsException($"FilePath must not be a rooted path: '{filePath}'");
             }
             FilePath = Path.ChangeExtension(filePath, "asset");
+            SettingsPath = settingsPath;
+            Label = label;
         }
 
         public string GetResourcesPath()

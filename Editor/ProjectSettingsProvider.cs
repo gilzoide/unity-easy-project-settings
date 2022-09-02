@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,7 +13,7 @@ namespace Gilzoide.EasyProjectSettings.Editor
         private ScriptableObject _object;
         private UnityEditor.Editor _objectEditor;
 
-        public ProjectSettingsProvider(Type type) : base(GetSettingsPath(type), SettingsScope.Project)
+        public ProjectSettingsProvider(Type type) : base(ProjectSettingsProviderGroup.GetSettingsPath(type), SettingsScope.Project)
         {
             if (!type.IsSubclassOf(typeof(ScriptableObject)))
             {
@@ -23,6 +22,10 @@ namespace Gilzoide.EasyProjectSettings.Editor
 
             _settingsType = type;
             _attribute = ProjectSettings.GetAttribute(type);
+            if (!string.IsNullOrWhiteSpace(_attribute.Label))
+            {
+                label = _attribute.Label;
+            }
         }
 
         public override void OnActivate(string searchContext, VisualElement rootElement)
@@ -58,44 +61,6 @@ namespace Gilzoide.EasyProjectSettings.Editor
                     EditorGUILayout.ObjectField(_object, _settingsType, false);
                 }
             }
-        }
-
-        public static string GetSettingsPath(Type type)
-        {
-            return "Project/" + type.Name;
-        }
-
-        [SettingsProviderGroup]
-        private static SettingsProvider[] GetProviders()
-        {
-            var providers = new List<SettingsProvider>();
-            foreach (Type type in TypeCache.GetTypesWithAttribute<ProjectSettingsAttribute>())
-            {
-                try
-                {
-                    providers.Add(new ProjectSettingsProvider(type));
-                }
-                catch (ProjectSettingsException exception)
-                {
-                    providers.Add(new ErrorProjectSettingsProvider(type, exception));
-                }
-            }
-            return providers.ToArray();
-        }
-    }
-
-    public class ErrorProjectSettingsProvider : SettingsProvider
-    {
-        private Exception Exception;
-
-        public ErrorProjectSettingsProvider(Type type, Exception exception) : base(ProjectSettingsProvider.GetSettingsPath(type), SettingsScope.Project)
-        {
-            Exception = exception;
-        }
-
-        public override void OnGUI(string searchContext)
-        {
-            EditorGUILayout.HelpBox(Exception.Message, MessageType.Error);
         }
     }
 }
