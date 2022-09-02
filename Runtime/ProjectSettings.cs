@@ -46,11 +46,11 @@ namespace Gilzoide.EasyProjectSettings
             ProjectSettingsAttribute attribute = GetAttribute(type);
 #if UNITY_EDITOR
             settings = (ScriptableObject) (attribute.IsRelativeToAssets
-                ? AssetDatabase.LoadAssetAtPath(attribute.FilePath, type)
-                : UnityEditorInternal.InternalEditorUtility.LoadSerializedFileAndForget(attribute.FilePath).FirstOrDefault());
+                ? AssetDatabase.LoadAssetAtPath(attribute.AssetPath, type)
+                : UnityEditorInternal.InternalEditorUtility.LoadSerializedFileAndForget(attribute.AssetPath).FirstOrDefault());
             return settings != null;
 #else
-            settings = Resources.Load<ScriptableObject>(attribute.GetResourcesPath());
+            settings = Resources.Load<ScriptableObject>(attribute.ResourcesPath);
             return settings != null;
 #endif
         }
@@ -78,13 +78,13 @@ namespace Gilzoide.EasyProjectSettings
             {
                 if (!AssetDatabase.Contains(obj))
                 {
-                    AssetDatabase.CreateAsset(obj, attribute.FilePath);
+                    AssetDatabase.CreateAsset(obj, attribute.AssetPath);
                 }
                 AssetDatabase.SaveAssetIfDirty(obj);
             }
             else
             {
-                UnityEditorInternal.InternalEditorUtility.SaveToSerializedFileAndForget(new[] { obj }, attribute.FilePath, true);
+                UnityEditorInternal.InternalEditorUtility.SaveToSerializedFileAndForget(new[] { obj }, attribute.AssetPath, true);
             }
         }
 #endif

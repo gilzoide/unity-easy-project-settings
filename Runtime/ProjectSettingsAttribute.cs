@@ -8,32 +8,34 @@ namespace Gilzoide.EasyProjectSettings
     {
         public const string ResourcesDirectoryIdentifier = "/Resources/";
 
-        public string FilePath;
+        public string AssetPath;
         public string SettingsPath;
         public string Label;
 
-        public bool IsRelativeToAssets => FilePath.StartsWith("Assets/");
-        public bool IsRelativeToResources => FilePath.IndexOf(ResourcesDirectoryIdentifier) >= 0;
-
-        public ProjectSettingsAttribute(string filePath, string settingsPath = null, string label = null)
+        public bool IsRelativeToAssets => AssetPath.StartsWith("Assets/");
+        public bool IsRelativeToResources => AssetPath.IndexOf(ResourcesDirectoryIdentifier) >= 0;
+        public string ResourcesPath
         {
-            if (Path.IsPathRooted(filePath))
+            get
             {
-                throw new ProjectSettingsException($"FilePath must not be a rooted path: '{filePath}'");
+                int resourcesIndex = AssetPath.IndexOf(ResourcesDirectoryIdentifier);
+                if (resourcesIndex < 0)
+                {
+                    throw new ProjectSettingsException($"{nameof(AssetPath)} is not a Resources directory: '{AssetPath}'");
+                }
+                return Path.ChangeExtension(AssetPath.Substring(resourcesIndex + ResourcesDirectoryIdentifier.Length), null);
             }
-            FilePath = Path.ChangeExtension(filePath, "asset");
-            SettingsPath = settingsPath;
-            Label = label;
         }
 
-        public string GetResourcesPath()
+        public ProjectSettingsAttribute(string assetPath, string settingsPath = null, string label = null)
         {
-            int resourcesIndex = FilePath.IndexOf(ResourcesDirectoryIdentifier);
-            if (resourcesIndex < 0)
+            if (Path.IsPathRooted(assetPath))
             {
-                throw new ProjectSettingsException($"FilePath is not a Resources directory: '{FilePath}'");
+                throw new ProjectSettingsException($"{nameof(AssetPath)} must not be a rooted path: '{assetPath}'");
             }
-            return Path.ChangeExtension(FilePath.Substring(resourcesIndex + ResourcesDirectoryIdentifier.Length), null);
+            AssetPath = Path.ChangeExtension(assetPath, "asset");
+            SettingsPath = settingsPath;
+            Label = label;
         }
     }
 }
