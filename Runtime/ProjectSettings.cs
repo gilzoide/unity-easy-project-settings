@@ -45,12 +45,13 @@ namespace Gilzoide.EasyProjectSettings
         {
             ProjectSettingsAttribute attribute = GetAttribute(type);
 #if UNITY_EDITOR
-            settings = (ScriptableObject) (attribute.IsRelativeToAssets()
+            settings = (ScriptableObject) (attribute.IsRelativeToAssets
                 ? AssetDatabase.LoadAssetAtPath(attribute.FilePath, type)
                 : UnityEditorInternal.InternalEditorUtility.LoadSerializedFileAndForget(attribute.FilePath).FirstOrDefault());
             return settings != null;
 #else
-            return (bool) (settings = Resources.Load<ScriptableObject>(attribute.GetResourcesPath()));
+            settings = Resources.Load<ScriptableObject>(attribute.GetResourcesPath());
+            return settings != null;
 #endif
         }
 
@@ -73,7 +74,7 @@ namespace Gilzoide.EasyProjectSettings
             }
 
             ProjectSettingsAttribute attribute = GetAttribute(obj.GetType());
-            if (attribute.IsRelativeToAssets())
+            if (attribute.IsRelativeToAssets)
             {
                 if (!AssetDatabase.Contains(obj))
                 {
@@ -85,11 +86,6 @@ namespace Gilzoide.EasyProjectSettings
             {
                 UnityEditorInternal.InternalEditorUtility.SaveToSerializedFileAndForget(new[] { obj }, attribute.FilePath, true);
             }
-        }
-
-        private static bool IsRelativeToAssets(this ProjectSettingsAttribute attribute)
-        {
-            return attribute.FilePath.StartsWith("Assets/");
         }
 #endif
     }

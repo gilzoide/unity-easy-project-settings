@@ -31,7 +31,7 @@ namespace Gilzoide.EasyProjectSettings.Editor
             keywords = AssetSettingsProvider.GetSearchKeywordsFromSerializedObject(new SerializedObject(_object));
             
             _objectEditor = UnityEditor.Editor.CreateEditor(_object);
-            if (_objectEditor.GetType().FullName.StartsWith("UnityEditor"))
+            if (_objectEditor.GetType().FullName.StartsWith("UnityEditor."))
             {
                 Object.DestroyImmediate(_objectEditor);
                 _objectEditor = UnityEditor.Editor.CreateEditor(_object, typeof(SkipScriptEditor));
@@ -47,6 +47,17 @@ namespace Gilzoide.EasyProjectSettings.Editor
         {
             EditorGUILayout.Space();
             _objectEditor.OnInspectorGUI();
+        }
+
+        public override void OnTitleBarGUI()
+        {
+            if (_attribute.IsRelativeToAssets && _object != null)
+            {
+                using (new EditorGUI.DisabledScope(true))
+                {
+                    EditorGUILayout.ObjectField(_object, _settingsType, false);
+                }
+            }
         }
 
         public static string GetSettingsPath(Type type)

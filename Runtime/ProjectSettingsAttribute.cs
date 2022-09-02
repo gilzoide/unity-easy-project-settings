@@ -10,6 +10,9 @@ namespace Gilzoide.EasyProjectSettings
 
         public string FilePath;
         
+        public bool IsRelativeToAssets => FilePath.StartsWith("Assets/");
+        public bool IsRelativeToResources => FilePath.IndexOf(ResourcesDirectoryIdentifier) >= 0;
+
         public ProjectSettingsAttribute(string filePath)
         {
             if (Path.IsPathRooted(filePath))
