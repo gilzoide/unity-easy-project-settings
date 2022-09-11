@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -48,11 +49,10 @@ namespace Gilzoide.EasyProjectSettings
             settings = (ScriptableObject) (attribute.IsRelativeToAssets
                 ? AssetDatabase.LoadAssetAtPath(attribute.AssetPath, type)
                 : UnityEditorInternal.InternalEditorUtility.LoadSerializedFileAndForget(attribute.AssetPath).FirstOrDefault());
-            return settings != null;
 #else
             settings = Resources.Load<ScriptableObject>(attribute.ResourcesPath);
-            return settings != null;
 #endif
+            return settings != null;
         }
 
         public static ProjectSettingsAttribute GetAttribute(Type type)
@@ -74,6 +74,12 @@ namespace Gilzoide.EasyProjectSettings
             }
 
             ProjectSettingsAttribute attribute = GetAttribute(obj.GetType());
+            string directoryPath = Path.GetDirectoryName(attribute.AssetPath);
+            if (!string.IsNullOrWhiteSpace(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            
             if (attribute.IsRelativeToAssets)
             {
                 if (!AssetDatabase.Contains(obj))
