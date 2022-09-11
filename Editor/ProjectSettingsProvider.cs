@@ -22,6 +22,10 @@ namespace Gilzoide.EasyProjectSettings.Editor
 
             _settingsType = type;
             _attribute = ProjectSettings.GetAttribute(type);
+            if (string.IsNullOrWhiteSpace(_attribute.AssetPath))
+            {
+                throw new ProjectSettingsException($"ProjectSettingsAttribute cannot have an empty AssetPath: '{type.Name}'");
+            }
             if (!string.IsNullOrWhiteSpace(_attribute.Label))
             {
                 label = _attribute.Label;
