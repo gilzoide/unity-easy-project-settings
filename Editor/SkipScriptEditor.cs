@@ -2,6 +2,7 @@ using UnityEditor;
 
 namespace Gilzoide.EasyProjectSettings.Editor
 {
+    [CanEditMultipleObjects]
     public class SkipScriptEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
