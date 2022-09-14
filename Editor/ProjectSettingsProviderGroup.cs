@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 namespace Gilzoide.EasyProjectSettings.Editor
 {
@@ -27,6 +28,10 @@ namespace Gilzoide.EasyProjectSettings.Editor
                 catch (ProjectSettingsException exception)
                 {
                     providers.Add(new ErrorProjectSettingsProvider(type, exception));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
                 }
             }
             return providers.ToArray();

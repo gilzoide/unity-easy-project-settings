@@ -31,10 +31,6 @@ namespace Gilzoide.EasyProjectSettings
             }
         }
 
-        public ProjectSettingsAttribute()
-        {
-        }
-
         public ProjectSettingsAttribute(string assetPath)
         {
             AssetPath = assetPath;
