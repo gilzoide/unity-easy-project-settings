@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using UnityEditor;
 
 namespace Gilzoide.EasyProjectSettings
 {
@@ -23,6 +24,8 @@ namespace Gilzoide.EasyProjectSettings
             set => _assetPath = Path.ChangeExtension(value, "asset");
         }
         private string _assetPath;
+        /// <summary>Determines whether settings appear in the Project Settings window or in the Preferences window</summary>
+        public SettingsScope SettingsScope { get; set; } = SettingsScope.Project;
         /// <summary>
         /// Path used to place the SettingsProvider in the tree view of the Settings window.
         /// The path should be unique among all other settings paths and should use "/" as its separator.

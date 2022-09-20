@@ -10,9 +10,27 @@ namespace Gilzoide.EasyProjectSettings.Editor
         public static string GetSettingsPath(Type type)
         {
             ProjectSettingsAttribute attribute = ProjectSettings.GetAttribute(type);
-            return !string.IsNullOrWhiteSpace(attribute?.SettingsPath)
-                ? attribute.SettingsPath
-                : "Project/" + type.Name;
+            if (!string.IsNullOrWhiteSpace(attribute?.SettingsPath))
+            {
+                return attribute.SettingsPath;
+            }
+            
+            switch (attribute.SettingsScope)
+            {
+                case SettingsScope.User:
+                    return "Preferences/" + type.Name;
+
+                case SettingsScope.Project:
+                    return "Project/" + type.Name;
+
+                default:
+                    return type.Name;
+            }
+        }
+
+        public static SettingsScope GetSettingsScope(Type type)
+        {
+            return ProjectSettings.GetAttribute(type).SettingsScope;
         }
 
         [SettingsProviderGroup]

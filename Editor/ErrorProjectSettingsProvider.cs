@@ -9,7 +9,8 @@ namespace Gilzoide.EasyProjectSettings.Editor
         private MonoScript _script;
         private Exception _exception;
 
-        public ErrorProjectSettingsProvider(Type type, Exception exception) : base(ProjectSettingsProviderGroup.GetSettingsPath(type), SettingsScope.Project)
+        public ErrorProjectSettingsProvider(Type type, Exception exception)
+            : base(ProjectSettingsProviderGroup.GetSettingsPath(type), ProjectSettingsProviderGroup.GetSettingsScope(type))
         {
             _exception = exception;
             _script = GetScriptForType(type);

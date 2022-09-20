@@ -13,7 +13,8 @@ namespace Gilzoide.EasyProjectSettings.Editor
         private ScriptableObject _object;
         private UnityEditor.Editor _objectEditor;
 
-        public ProjectSettingsProvider(Type type) : base(ProjectSettingsProviderGroup.GetSettingsPath(type), SettingsScope.Project)
+        public ProjectSettingsProvider(Type type)
+            : base(ProjectSettingsProviderGroup.GetSettingsPath(type), ProjectSettingsProviderGroup.GetSettingsScope(type))
         {
             if (!type.IsSubclassOf(typeof(ScriptableObject)))
             {

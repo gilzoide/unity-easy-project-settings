@@ -24,6 +24,7 @@ public class SampleSettings : ScriptableObject
   + Settings can be loaded by code in built players if asset paths are relative to a `Resources` folder
 - Supports any asset paths, including paths relative to the `ProjectSettings` folder
 - Supports your custom editors, no extra code required
+- Supports both Project and User [settings scopes](https://docs.unity3d.com/ScriptReference/SettingsScope.html)
 
 
 ## How to install
