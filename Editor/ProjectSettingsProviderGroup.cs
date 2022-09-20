@@ -15,13 +15,13 @@ namespace Gilzoide.EasyProjectSettings.Editor
                 return attribute.SettingsPath;
             }
             
-            switch (attribute.SettingsScope)
+            switch (attribute.SettingsType)
             {
-                case SettingsScope.User:
-                    return "Preferences/" + type.Name;
-
-                case SettingsScope.Project:
+                case SettingsType.ProjectSettings:
                     return "Project/" + type.Name;
+
+                case SettingsType.UserSettings:
+                    return "Preferences/" + type.Name;
 
                 default:
                     return type.Name;
@@ -30,7 +30,15 @@ namespace Gilzoide.EasyProjectSettings.Editor
 
         public static SettingsScope GetSettingsScope(Type type)
         {
-            return ProjectSettings.GetAttribute(type).SettingsScope;
+            switch (ProjectSettings.GetAttribute(type).SettingsType)
+            {
+                case SettingsType.UserSettings:
+                    return SettingsScope.User;
+                
+                case SettingsType.ProjectSettings:
+                default:
+                    return SettingsScope.Project;
+            }
         }
 
         [SettingsProviderGroup]
