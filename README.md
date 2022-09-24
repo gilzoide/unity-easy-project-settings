@@ -32,7 +32,7 @@ Install via [Unity Package Manager](https://docs.unity3d.com/Manual/upm-ui-gitur
 using the following URL:
 
 ```
-https://github.com/gilzoide/unity-easy-project-settings.git
+https://github.com/gilzoide/unity-easy-project-settings.git#1.0.0
 ```
 
 
