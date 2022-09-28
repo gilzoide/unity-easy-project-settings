@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -45,7 +47,7 @@ namespace Gilzoide.EasyProjectSettings.Editor
         private static SettingsProvider[] GetProviders()
         {
             var providers = new List<SettingsProvider>();
-            foreach (Type type in TypeCache.GetTypesWithAttribute<ProjectSettingsAttribute>())
+            foreach (Type type in GetTypesWithAttribute<ProjectSettingsAttribute>())
             {
                 try
                 {
@@ -61,6 +63,18 @@ namespace Gilzoide.EasyProjectSettings.Editor
                 }
             }
             return providers.ToArray();
+        }
+
+        private static IList<Type> GetTypesWithAttribute<T>() where T : Attribute
+        {
+#if UNITY_2019_2_OR_NEWER
+            return TypeCache.GetTypesWithAttribute<T>();
+#else
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(asm => asm.GetTypes())
+                .Where(type => type.GetCustomAttribute<T>() != null)
+                .ToList();
+#endif
         }
     }
 }
