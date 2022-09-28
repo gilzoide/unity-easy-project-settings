@@ -1,4 +1,6 @@
 # Easy Project Settings
+[![openupm](https://img.shields.io/npm/v/com.gilzoide.easy-project-settings?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.gilzoide.easy-project-settings/)
+
 Easily create custom Project Settings by adding [ProjectSettingsAttribute](Runtime/ProjectSettingsAttribute.cs) to your `ScriptableObject` subclass!
 
 ```cs
@@ -28,8 +30,15 @@ public class SampleSettings : ScriptableObject
 
 
 ## How to install
-Install via [Unity Package Manager](https://docs.unity3d.com/Manual/upm-ui-giturl.html)
-using the following URL:
+This package is available on the [openupm registry](https://openupm.com/)
+and can be installed using the [openupm-cli](https://github.com/openupm/openupm-cli):
+
+```
+openupm add com.gilzoide.easy-project-settings
+```
+
+Otherwise, you can install directly using the [Unity Package Manager](https://docs.unity3d.com/Manual/upm-ui-giturl.html)
+with the following URL:
 
 ```
 https://github.com/gilzoide/unity-easy-project-settings.git#1.0.0
