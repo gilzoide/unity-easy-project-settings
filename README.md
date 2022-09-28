@@ -41,7 +41,7 @@ Otherwise, you can install directly using the [Unity Package Manager](https://do
 with the following URL:
 
 ```
-https://github.com/gilzoide/unity-easy-project-settings.git#1.0.0
+https://github.com/gilzoide/unity-easy-project-settings.git#1.0.1
 ```
 
 
