@@ -126,7 +126,9 @@ namespace Gilzoide.EasyProjectSettings
                 {
                     AssetDatabase.CreateAsset(obj, attribute.AssetPath);
                 }
+#if UNITY_2020_3_OR_NEWER
                 AssetDatabase.SaveAssetIfDirty(obj);
+#endif
             }
             else
             {
