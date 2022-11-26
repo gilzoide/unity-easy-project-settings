@@ -1,7 +1,7 @@
 # Easy Project Settings
 [![openupm](https://img.shields.io/npm/v/com.gilzoide.easy-project-settings?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.gilzoide.easy-project-settings/)
 
-Easily create custom Project Settings by adding [ProjectSettingsAttribute](Runtime/ProjectSettingsAttribute.cs) to your `ScriptableObject` subclass!
+Easily create custom Project Settings by adding [[ProjectSettings(...)]](Runtime/ProjectSettingsAttribute.cs) attribute to your `ScriptableObject` subclass!
 
 ```cs
 using UnityEngine;
@@ -20,7 +20,7 @@ public class SampleSettings : ScriptableObject
 
 
 ## Features
-- Simple to use: just add [ProjectSettingsAttribute](Runtime/ProjectSettingsAttribute.cs) to your `ScriptableObject` subclass and it will automatically appear at the Project Settings window
+- Simple to use: just add a [[ProjectSettings(...)]](Runtime/ProjectSettingsAttribute.cs) attribute to your `ScriptableObject` subclass and it will automatically appear at the Project Settings window
 - Project settings can be easily loaded in script code by calling `ProjectSettings.Load<T>()`
   + Any settings can be loaded by code in the Unity editor, independent of the asset path
   + Settings can be loaded by code in built players if asset paths are relative to a `Resources` folder
