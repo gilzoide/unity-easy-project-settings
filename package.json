@@ -1,7 +1,7 @@
 {
   "name": "com.gilzoide.easy-project-settings",
   "displayName": "Easy Project Settings",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Easily create custom Project Settings by adding [ProjectSettings(...)] attribute to your ScriptableObject subclass",
   "homepage": "https://github.com/gilzoide/unity-easy-project-settings",
   "license": "Unlicense",
