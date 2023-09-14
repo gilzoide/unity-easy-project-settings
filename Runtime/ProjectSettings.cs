@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -37,6 +39,34 @@ namespace Gilzoide.EasyProjectSettings
         public static T Load<T>() where T : ScriptableObject
         {
             return (T) Load(typeof(T));
+        }
+
+        /// <summary>
+        /// Async version of <see cref="Load"/>
+        /// </summary>
+        /// <param name="type"><see cref="ScriptableObject"/> subclass. Must have a <see cref="ProjectSettingsAttribute"/></param>
+        /// <exception cref="ProjectSettingsException">Thrown when <paramref name="type"/> does not have a <see cref="ProjectSettingsAttribute"/></exception>
+        public static async Task<ScriptableObject> LoadAsync(Type type, CancellationToken cancellationToken = default)
+        {
+            ProjectSettingsAttribute attribute = GetAttribute(type);
+#if UNITY_EDITOR
+            if (!attribute.IsRelativeToAssets)
+            {
+                return (ScriptableObject) UnityEditorInternal.InternalEditorUtility.LoadSerializedFileAndForget(attribute.AssetPath).FirstOrDefault();
+            }
+#endif
+            var loadOperation = Resources.LoadAsync(attribute.ResourcesPath, type);
+            while (!loadOperation.isDone)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Task.Yield();
+            }
+            return (ScriptableObject) loadOperation.asset;
+        }
+        /// <summary>Typed version of <see cref="LoadAsync"/></summary>
+        public static async Task<T> LoadAsync<T>(CancellationToken cancellationToken = default) where T : ScriptableObject
+        {
+            return (T) await LoadAsync(typeof(T), cancellationToken);
         }
 
         /// <summary>
@@ -91,6 +121,29 @@ namespace Gilzoide.EasyProjectSettings
         public static T LoadOrCreate<T>() where T : ScriptableObject
         {
             return (T) LoadOrCreate(typeof(T));
+        }
+
+        /// <summary>
+        /// Async version of <see cref="LoadOrCreate"/>
+        /// </summary>
+        /// <param name="type"><see cref="ScriptableObject"/> subclass. Must have a <see cref="ProjectSettingsAttribute"/></param>
+        /// <exception cref="ProjectSettingsException">Thrown when <paramref name="type"/> does not have a <see cref="ProjectSettingsAttribute"/></exception>
+        public static async Task<ScriptableObject> LoadOrCreateAsync(Type type, CancellationToken cancellationToken = default)
+        {
+            var settingsObject = await LoadAsync(type, cancellationToken);
+            if (settingsObject == null)
+            {
+                settingsObject = ScriptableObject.CreateInstance(type);
+#if UNITY_EDITOR
+                Save(settingsObject);
+#endif
+            }
+            return settingsObject;
+        }
+        /// <summary>Typed version of <see cref="LoadOrCreateAsync"/></summary>
+        public static async Task<T> LoadOrCreateAsync<T>(CancellationToken cancellationToken = default) where T : ScriptableObject
+        {
+            return (T) await LoadOrCreateAsync(typeof(T), cancellationToken);
         }
 
         /// <summary>Get the <see cref="ProjectSettingsAttribute"/> from <paramref name="type"/></summary>

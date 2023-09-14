@@ -21,7 +21,7 @@ public class SampleSettings : ScriptableObject
 
 ## Features
 - Simple to use: just add a [[ProjectSettings(...)]](Runtime/ProjectSettingsAttribute.cs) attribute to your `ScriptableObject` subclass and it will automatically appear at the Project Settings window
-- Project settings can be easily loaded in script code by calling `ProjectSettings.Load<T>()`
+- Project settings can be easily loaded in script code by calling `ProjectSettings.Load<T>()`, `ProjectSettings.TryLoad<T>(out T)` or `ProjectSettings.LoadAsync<T>()`
   + Any settings can be loaded by code in the Unity editor, independent of the asset path
   + Settings can be loaded by code in built players if asset paths are relative to a `Resources` folder
 - Supports any asset paths, including paths relative to the `ProjectSettings` folder
